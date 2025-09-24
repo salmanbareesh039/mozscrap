@@ -1,19 +1,16 @@
 {
-  "title": "Input schema for Whois Lookup Scraper",
-  "type": "object",
-  "schemaVersion": 1,
-  "properties": {
-    "domains": {
-      "title": "Domains",
-      "type": "array",
-      "description": "List of domains to lookup",
-      "editor": "stringList",
-      "prefill": [
-        "example.com",
-        "apify.com",
-        "github.com"
-      ]
-    }
-  },
-  "required": ["domains"]
+    "title": "Moz DA PA Metrics Input",
+    "description": "Input schema for fetching Moz Domain Authority and Page Authority metrics",
+    "type": "object",
+    "schemaVersion": 1,
+    "properties": {
+        "domain": {
+            "title": "Domain",
+            "type": "string",
+            "description": "Domain name to analyze (e.g., example.com)",
+            "example": "example.com",
+            "editor": "textfield"
+        }
+    },
+    "required": ["domain"]
 }
