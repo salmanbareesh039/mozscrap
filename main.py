@@ -25,15 +25,14 @@ async def main():
                     data = await resp.json()
                     print(f"Response data: {data}")
                     
-                    if not data or not isinstance(data, list) or len(data) == 0:
-                        result["error"] = "No data returned or invalid response format"
-                    elif not data[0].get("success", False):
-                        result["error"] = f"API returned success=False: {data[0].get('error', 'Unknown error')}"
+                    if not data or not data.get("success", False):
+                        result["error"] = f"API returned success=False: {data.get('error', 'Unknown error') if data else 'No data returned'}"
                     else:
-                        if "data" not in data[0] or len(data[0]["data"]) == 0:
+                        if "data" not in data or len(data["data"]) == 0:
                             result["error"] = "No metrics data found in response"
                         else:
-                            metrics = data[0]["data"][0]["data"]
+                            # The data structure is: data["data"][0]["data"] contains the metrics
+                            metrics = data["data"][0]["data"]
                             result.update({
                                 "domain_authority": metrics.get("moz_domain_authority"),
                                 "page_rank": metrics.get("page_rank"),
