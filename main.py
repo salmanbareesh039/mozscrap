@@ -13,7 +13,7 @@ async def main():
             await Actor.push_data({"error": "No domain provided"})
             return
         
-        result = {"domain": domain, "error": ""}
+        result = {"domain": domain}
         
         try:
             async with aiohttp.ClientSession() as session:
@@ -26,10 +26,10 @@ async def main():
                     print(f"Response data: {data}")
                     
                     if not data or not data.get("success", False):
-                        result["error"] = f"API returned success=False: {data.get('error', 'Unknown error') if data else 'No data returned'}"
+                        print(f"API error: {data.get('error', 'Unknown error') if data else 'No data returned'}")
                     else:
                         if "data" not in data or len(data["data"]) == 0:
-                            result["error"] = "No metrics data found in response"
+                            print("No metrics data found in response")
                         else:
                             # The data structure is: data["data"][0]["data"] contains the metrics
                             metrics = data["data"][0]["data"]
@@ -49,7 +49,7 @@ async def main():
                                 "nofollow_root_domains": metrics.get("moz_nofollow_root_domains_to_subdomain"),
                             })
         except Exception as e:
-            result["error"] = str(e)
+            print(f"Exception occurred: {str(e)}")
         
         # Save result to Apify dataset
         await Actor.push_data(result)
