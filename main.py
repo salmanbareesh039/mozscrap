@@ -19,7 +19,7 @@ async def main():
             async with aiohttp.ClientSession() as session:
                 payload = {"domains": [domain]}
                 print(f"Sending payload: {payload}")
-                async with session.post(API_URL, json=payload) as resp:
+                
                 async with session.post(API_URL, json=payload) as resp:
                     print(f"Response status: {resp.status}")
                     data = await resp.json()
