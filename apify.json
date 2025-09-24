@@ -1,34 +1,26 @@
 {
-  "name": "whois-lookup-scraper",
-  "version": "0.1.1",
-  "description": "An Apify actor that retrieves Whois information for a list of domains using Python. Useful for domain research, monitoring, and bulk Whois lookups. Handles errors gracefully and outputs results to the Apify dataset.",
-  "main": "main.py",
-  "actorSpecification": 1,
-  "title": "Bulk Whois Lookup Scraper",
-  "author": "Salman Bareesh <your-email@example.com>",
-  "homepage": "https://github.com/salmanbareesh039/whois-lookup-scraper",
-  "changelog": [
-    {"version": "0.1.1", "description": "Enhanced metadata, added example input, improved documentation."},
-    {"version": "0.1.0", "description": "Initial release."}
-  ],
-  "input": {
-    "title": "Input",
-    "type": "object",
-    "properties": {
-      "domains": {
-        "title": "Domains",
-        "type": "array",
-        "items": { "type": "string" },
-        "description": "List of domains to lookup."
-      }
+    "actorSpecification": 1,
+    "name": "moz-da-pa-metrics",
+    "title": "Moz DA PA Metrics",
+    "description": "Fetch Moz Domain Authority, Page Authority, and comprehensive SEO metrics for any domain using Seomator API",
+    "version": "1.0.0",
+    "meta": {
+        "templateId": "python-start"
     },
-    "required": ["domains"],
-    "examples": [
-      {
-        "domains": ["example.com", "apify.com", "github.com"]
-      }
+    "input": "./INPUT_SCHEMA.json",
+    "dockerfile": "./Dockerfile",
+    "readme": "./README.md",
+    "categories": [
+        "SEO",
+        "ANALYTICS"
+    ],
+    "keywords": [
+        "moz",
+        "domain authority",
+        "page authority", 
+        "seo",
+        "metrics",
+        "backlinks",
+        "spam score"
     ]
-  },
-  "categories": ["Scraper", "Whois", "Domains", "Research", "Monitoring"],
-  "tags": ["python", "whois", "bulk", "domains", "apify-actor", "automation"]
-} 
+}
