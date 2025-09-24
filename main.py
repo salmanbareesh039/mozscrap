@@ -13,7 +13,7 @@ async def main():
             await Actor.push_data({"error": "No domain provided"})
             return
 
-        result = {"domain": domain, "error": ""}
+        result = {"domains": domain}
         try:
             async with aiohttp.ClientSession() as session:
                 async with session.post(API_URL, json={"domains": [domain]}) as resp:
@@ -53,3 +53,4 @@ async def main():
 if __name__ == "__main__":
     import asyncio
     asyncio.run(main())
+
