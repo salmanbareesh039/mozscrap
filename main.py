@@ -8,22 +8,22 @@ async def main():
         # Get input (expects { "domain": "example.com" })
         input_data = await Actor.get_input() or {}
         domain = input_data.get("domain")
-        
+
         if not domain:
             await Actor.push_data({"error": "No domain provided"})
             return
-        
+
         result = {"domain": domain, "error": ""}
-        
         try:
             async with aiohttp.ClientSession() as session:
                 async with session.post(API_URL, json={"domains": [domain]}) as resp:
                     data = await resp.json()
-                    
+
                     if not data or not data[0].get("success"):
                         result["error"] = "No data returned"
                     else:
                         metrics = data[0]["data"][0]["data"]
+
                         result.update({
                             "domain_authority": metrics.get("moz_domain_authority"),
                             "page_rank": metrics.get("page_rank"),
@@ -39,14 +39,16 @@ async def main():
                             "external_redirect_pages": metrics.get("moz_external_redirect_pages_to_subdomain"),
                             "nofollow_root_domains": metrics.get("moz_nofollow_root_domains_to_subdomain"),
                         })
+
         except Exception as e:
             result["error"] = str(e)
-        
+
         # Save result to Apify dataset
         await Actor.push_data(result)
-        
+
         # Debug log
         print(result)
+
 
 if __name__ == "__main__":
     import asyncio
