@@ -1,0 +1,34 @@
+{
+  "name": "whois-lookup-scraper",
+  "version": "0.1.1",
+  "description": "An Apify actor that retrieves Whois information for a list of domains using Python. Useful for domain research, monitoring, and bulk Whois lookups. Handles errors gracefully and outputs results to the Apify dataset.",
+  "main": "main.py",
+  "actorSpecification": 1,
+  "title": "Bulk Whois Lookup Scraper",
+  "author": "Salman Bareesh <your-email@example.com>",
+  "homepage": "https://github.com/salmanbareesh039/whois-lookup-scraper",
+  "changelog": [
+    {"version": "0.1.1", "description": "Enhanced metadata, added example input, improved documentation."},
+    {"version": "0.1.0", "description": "Initial release."}
+  ],
+  "input": {
+    "title": "Input",
+    "type": "object",
+    "properties": {
+      "domains": {
+        "title": "Domains",
+        "type": "array",
+        "items": { "type": "string" },
+        "description": "List of domains to lookup."
+      }
+    },
+    "required": ["domains"],
+    "examples": [
+      {
+        "domains": ["example.com", "apify.com", "github.com"]
+      }
+    ]
+  },
+  "categories": ["Scraper", "Whois", "Domains", "Research", "Monitoring"],
+  "tags": ["python", "whois", "bulk", "domains", "apify-actor", "automation"]
+} 

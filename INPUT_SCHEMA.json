@@ -1,0 +1,19 @@
+{
+  "title": "Input schema for Whois Lookup Scraper",
+  "type": "object",
+  "schemaVersion": 1,
+  "properties": {
+    "domains": {
+      "title": "Domains",
+      "type": "array",
+      "description": "List of domains to lookup",
+      "editor": "stringList",
+      "prefill": [
+        "example.com",
+        "apify.com",
+        "github.com"
+      ]
+    }
+  },
+  "required": ["domains"]
+}
