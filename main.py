@@ -1,33 +1,53 @@
-import whois
+import aiohttp
 from apify import Actor
+
+API_URL = "https://embed.seomator.com/api/moz-metrics"
 
 async def main():
     async with Actor:
-        # Get input from Apify (expects { "domains": ["example.com", ...] })
+        # Get input (expects { "domain": "example.com" })
         input_data = await Actor.get_input() or {}
-        domains = input_data.get('domains', [])
-        results = []
-        for domain in domains:
-            try:
-                w = whois.whois(domain)
-                result = {'domain': domain, 'error': ''}
-                # Add all parsed whois fields as columns
-                if isinstance(w, dict):
-                    for k, v in w.items():
-                        result[k] = v
-                else:
-                    # Some whois libraries return an object, not a dict
-                    for k in dir(w):
-                        if not k.startswith('_') and not callable(getattr(w, k)):
-                            result[k] = getattr(w, k)
-                results.append(result)
-            except Exception as e:
-                results.append({'domain': domain, 'error': str(e)})
-        # Save results to Apify dataset
-        await Actor.push_data(results)
-        # Optionally print results for debugging (can be removed in production)
-        print(results)
+        domain = input_data.get("domain")
+        
+        if not domain:
+            await Actor.push_data({"error": "No domain provided"})
+            return
+        
+        result = {"domain": domain, "error": ""}
+        
+        try:
+            async with aiohttp.ClientSession() as session:
+                async with session.post(API_URL, json={"domains": [domain]}) as resp:
+                    data = await resp.json()
+                    
+                    if not data or not data[0].get("success"):
+                        result["error"] = "No data returned"
+                    else:
+                        metrics = data[0]["data"][0]["data"]
+                        result.update({
+                            "domain_authority": metrics.get("moz_domain_authority"),
+                            "page_rank": metrics.get("page_rank"),
+                            "spam_score": metrics.get("moz_spam_score"),
+                            "link_propensity": metrics.get("moz_link_propensity"),
+                            "total_pages": metrics.get("moz_pages_to_subdomain"),
+                            "external_pages": metrics.get("moz_external_pages_to_subdomain"),
+                            "root_domains": metrics.get("moz_root_domains_to_subdomain"),
+                            "nofollow_pages": metrics.get("moz_nofollow_pages_to_subdomain"),
+                            "redirect_pages": metrics.get("moz_redirect_pages_to_subdomain"),
+                            "deleted_pages": metrics.get("moz_deleted_pages_to_subdomain"),
+                            "external_nofollow_pages": metrics.get("moz_external_nofollow_pages_to_subdomain"),
+                            "external_redirect_pages": metrics.get("moz_external_redirect_pages_to_subdomain"),
+                            "nofollow_root_domains": metrics.get("moz_nofollow_root_domains_to_subdomain"),
+                        })
+        except Exception as e:
+            result["error"] = str(e)
+        
+        # Save result to Apify dataset
+        await Actor.push_data(result)
+        
+        # Debug log
+        print(result)
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import asyncio
     asyncio.run(main())
